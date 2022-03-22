@@ -3,11 +3,10 @@ import api from '../api';
 
 const Users = () => {
   const [users, setUsers] = useState(api.users.fetchAll());
-  const [count, setCount] = useState(api.users.fetchAll().length);
+  const quantityOfUsers = users.length;
 
   const handleDelete = (userId) => {
     setUsers(prevState => prevState.filter(td => td._id !== userId));
-    setCount(prevState => prevState - 1);
   } 
   const renderPhrase = (number) => {
     let basePhrase = ' с тобой сегодня';
@@ -25,7 +24,7 @@ const Users = () => {
 
   const getMessageClasses = () => {
     let classes = 'badge m-2 ';
-    classes += count === 0 ? 'bg-danger' : 'bg-primary';
+    classes += quantityOfUsers === 0 ? 'bg-danger' : 'bg-primary';
     return classes;
   }
 
@@ -33,7 +32,7 @@ const Users = () => {
       <>
         <h2>
           <span className={getMessageClasses()}>
-          {count === 0 ? '' : count} {renderPhrase(count)}
+          {quantityOfUsers === 0 ? '' : quantityOfUsers} {renderPhrase(quantityOfUsers)}
           </span>
         </h2>
         <table className="table table-hover">
@@ -57,7 +56,7 @@ const Users = () => {
                     <td>{user.profession.name}</td>
                     <td>{user.completedMeetings}</td>
                     <td>{user.rate} /5</td>
-                    <td><button className='badge bg-danger' onClick={() => handleDelete(user._id)}>delete</button></td>
+                    <td><button className='btn btn-danger' onClick={() => handleDelete(user._id)}>delete</button></td>
                   </tr>
                 )
               })
