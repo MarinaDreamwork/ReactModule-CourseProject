@@ -1,8 +1,8 @@
 import SearchStatus from "./searchStatus";
 import User from "./user";
 
-const Users = ({users, onDelete, onToggleBookMark}) => {
-  console.log('users', users);
+const Users = ({props}) => {
+  const {users, onDelete, onToggleBookMark} = props;
 
   const quantityOfUsers = users.length;
 

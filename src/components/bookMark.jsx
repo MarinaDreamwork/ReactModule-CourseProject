@@ -1,13 +1,12 @@
 const BookMark = ({...rest}) => {
-  console.log('rest', rest);
+  const {id, onToggleBookMark} = rest;
+
   const getClassFromStatus = () => {
     return 'bi bi-bookmark' + (rest.user.bookmark ? '-fill': '');
   }
-  const handleToggleBookMark = (id) => {
-    rest.onToggleBookMark(id);
-  }
+
   return (
-    <i className={getClassFromStatus()} onClick={() => handleToggleBookMark(rest.user._id)}></i>
+    <i className={getClassFromStatus()} onClick={() => onToggleBookMark(id)}></i>
   )
 }
 
