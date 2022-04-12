@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import GroupList from './groupList';
 
 const Users = ({ users, onDelete, onToggleBookMark }) => {
-  const pageSize = 4;
+  const pageSize = 2;
 
   const [currentPage, setCurrentPage] = useState(1);
   const [professions, setProfessions] = useState();
@@ -25,7 +25,7 @@ const Users = ({ users, onDelete, onToggleBookMark }) => {
   const clearFilter = () => setSelectedProf();
   const filteredUsers = selectedProf
     ? users.filter((user) => {
-      return user.profession === selectedProf;
+      return user.profession.name === selectedProf.name;
     })
     : users;
   const count = filteredUsers.length;
@@ -34,6 +34,10 @@ const Users = ({ users, onDelete, onToggleBookMark }) => {
   useEffect(() => {
     api.professions.fetchAll().then(data => setProfessions(data));
   }, []);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedProf]);
 
   return (
     <div className='d-flex'>
