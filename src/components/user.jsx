@@ -21,9 +21,7 @@ const User = ({ user, ...rest }) => {
 };
 
 User.propTypes = {
-  user: PropTypes.object.isRequired,
-  onDelete: PropTypes.func.isRequired,
-  onToggleBookMark: PropTypes.func.isRequired
+  user: PropTypes.object.isRequired
 };
 
 export default User;
