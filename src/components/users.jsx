@@ -25,7 +25,7 @@ const Users = ({ users, onDelete, onToggleBookMark }) => {
   const clearFilter = () => setSelectedProf();
   const filteredUsers = selectedProf
     ? users.filter((user) => {
-      return user.profession.name === selectedProf.name;
+      return JSON.stringify(user.profession) === JSON.stringify(selectedProf);
     })
     : users;
   const count = filteredUsers.length;
