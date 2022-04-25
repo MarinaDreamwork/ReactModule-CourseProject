@@ -3,11 +3,11 @@ import { paginate } from '../utils/paginate';
 import api from '../api';
 import Pagination from './pagination';
 import SearchStatus from './searchStatus';
-import User from './user';
 import PropTypes from 'prop-types';
 import GroupList from './groupList';
+import UserTable from './userTable';
 
-const Users = ({ users, onDelete, onToggleBookMark }) => {
+const Users = ({ users, ...rest }) => {
   const pageSize = 2;
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -50,30 +50,7 @@ const Users = ({ users, onDelete, onToggleBookMark }) => {
         <div className='d-flex justify-content-center'>
           <SearchStatus length={count} />
         </div>
-        <table className='table table-hover'>
-          <thead>
-            <tr>
-              <th scope='col'>Имя</th>
-              <th scope='col'>Качества</th>
-              <th scope='col'>Профессия</th>
-              <th scope='col'>Встретился, раз</th>
-              <th scope='col'>Оценка</th>
-              <th scope='col'>Избранное</th>
-              <th scope='col'></th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              partOfUsers.map(user => (
-                <User
-                  key={user._id}
-                  user={user}
-                  onDelete={onDelete}
-                  onToggleBookMark={onToggleBookMark} />
-              ))
-            }
-          </tbody>
-        </table>
+        <UserTable users={partOfUsers} {...rest} />
         <div className='d-flex justify-content-center'>
           <Pagination
             usersCount={count}

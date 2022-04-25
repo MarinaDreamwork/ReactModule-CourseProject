@@ -2,9 +2,9 @@ import BookMark from './bookMark';
 import Qualities from './qualitie';
 import PropTypes from 'prop-types';
 
-const User = ({ user, onDelete, onToggleBookMark }) => {
+const User = ({ user, ...rest }) => {
   const handleDelete = (id) => {
-    onDelete(id);
+    rest.onDelete(id);
   };
 
   return (
@@ -14,7 +14,7 @@ const User = ({ user, onDelete, onToggleBookMark }) => {
       <td>{user.profession.name}</td>
       <td>{user.completedMeetings}</td>
       <td>{user.rate} /5</td>
-      <td><BookMark onToggleBookMark={onToggleBookMark} user={user}/></td>
+      <td><BookMark onToggleBookMark={rest.onToggleBookMark} user={user}/></td>
       <td><button className='btn btn-danger' onClick={() => handleDelete(user._id)}>delete</button></td>
     </tr>
   );
