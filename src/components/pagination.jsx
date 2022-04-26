@@ -6,19 +6,21 @@ const Pagination = ({ usersCount, pageSize, currentPage, onChangeClick }) => {
   if (count === 1) return null;
   const paginationItems = _.range(1, count + 1);
   return (
-    <nav>
-      <ul className='pagination'>
-        {
-          paginationItems.map(page => (
-            <li className={'page-item' + (page === currentPage ? ' active' : '')} key={page}>
-              <button className='page-link' onClick={() => onChangeClick(page)}>
-                {page}
-              </button>
-            </li>
-          ))
-        }
-      </ul>
-    </nav>
+    <div className='d-flex justify-content-center'>
+      <nav>
+        <ul className='pagination'>
+          {
+            paginationItems.map(page => (
+              <li className={'page-item' + (page === currentPage ? ' active' : '')} key={page}>
+                <button className='page-link' onClick={() => onChangeClick(page)}>
+                  {page}
+                </button>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </div>
   );
 };
 

@@ -21,11 +21,13 @@ const SearchStatus = ({ length }) => {
   };
 
   return (
-    <h2>
-      <span className={getMessageClasses()}>
-        {length === 0 ? '' : length} {renderPhrase(length)}
-      </span>
-    </h2>
+    <div className='d-flex justify-content-center'>
+      <h2>
+        <span className={getMessageClasses()}>
+          {length === 0 ? '' : length} {renderPhrase(length)}
+        </span>
+      </h2>
+    </div>
   );
 };
 
