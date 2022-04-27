@@ -90,7 +90,7 @@ const Users = () => {
       </div>
     );
   }
-  return 'loading....';
+  return <p>Loading...</p>;
 };
 
 export default Users;
