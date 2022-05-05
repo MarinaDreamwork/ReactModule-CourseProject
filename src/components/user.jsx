@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 
 const User = () => {
   const [selectedUser, setSelectedUser] = useState([]);
-  const [userExistId, setUserExistId] = useState();
   const history = useHistory();
   const params = useParams();
   const { userId } = params;
@@ -17,15 +16,9 @@ const User = () => {
     api.users.getById(userId).then(data => setSelectedUser([data]));
   }, [selectedUser]);
 
-  useEffect(() => {
-    selectedUser
-      ? setUserExistId(selectedUser.find(user => user ? user._id === userId : null))
-      : <p>Loading...</p>;
-  });
-
   return (
     <>
-      { userExistId
+      { selectedUser.length > 0
         ? selectedUser.map(user => (
           <div key={user._id}>
             <h2>{user.name}</h2>

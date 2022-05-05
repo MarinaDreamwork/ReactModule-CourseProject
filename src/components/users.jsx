@@ -6,12 +6,14 @@ import SearchStatus from './searchStatus';
 import GroupList from './groupList';
 import UserTable from './userTable';
 import _ from 'lodash';
+import SearchField from './searchField';
 
 const Users = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [professions, setProfessions] = useState();
   const [selectedProf, setSelectedProf] = useState();
   const [users, setUsers] = useState();
+  const [searchFieldData, setSearchFieldData] = useState();
   const pageSize = 6;
 
   const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc', caret: 'bi bi-caret-up-fill', currentTH: 'name' });
@@ -26,6 +28,10 @@ const Users = () => {
 
   const handleSort = (item) => {
     setSortBy(item);
+  };
+
+  const handleSearchField = (user) => {
+    user ? setSearchFieldData([user]) : setSearchFieldData();
   };
 
   useEffect(() => {
@@ -50,7 +56,7 @@ const Users = () => {
       : users;
 
     const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order]);
-    const count = filteredUsers.length;
+    const count = (searchFieldData && (searchFieldData.length)) || filteredUsers.length;
     const partOfUsers = paginate(sortedUsers, pageSize, currentPage);
 
     const handleDelete = (userId) => {
@@ -80,7 +86,13 @@ const Users = () => {
           </div>)}
         <div className='d-flex flex-column'>
           <SearchStatus length={count} />
-          <UserTable users={partOfUsers} onSort={handleSort} selectedSort={sortBy} onDelete={handleDelete} onToggleBookMark={onToggleBookMark} />
+          <SearchField users={users} onSearchChange={handleSearchField}/>
+          <UserTable users={partOfUsers}
+            onSort={handleSort}
+            selectedSort={sortBy}
+            onDelete={handleDelete}
+            onToggleBookMark={onToggleBookMark}
+            searchFieldData={searchFieldData}/>
           <Pagination
             usersCount={count}
             pageSize={pageSize}

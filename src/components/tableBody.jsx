@@ -2,7 +2,8 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { Link } from 'react-router-dom';
 
-const TableBody = ({ data, columns }) => {
+const TableBody = ({ data, columns, searchFieldData }) => {
+  const isSearched = searchFieldData || data;
   const renderContent = (item, column) => {
     if (columns[column].component) {
       const component = columns[column].component;
@@ -17,16 +18,17 @@ const TableBody = ({ data, columns }) => {
     <>
       <tbody>
         {
-          data.map(item => <tr key={item._id}>
+          isSearched.map(item => <tr key={item._id}>
             {
               Object.keys(columns).map(column => (
                 columns[column].name === 'Имя'
-                  ? <ul key={column} className='nav'><li className='nav-item'><Link className='nav-link' to={`users/${item._id}`}> {renderContent(item, column)}</Link></li></ul>
+                  ? <Link key={item._id} className='nav-link' to={`users/${item._id}`}> {item.name}</Link>
                   : <td key={column}>
                     {renderContent(item, column)}
                   </td>))
             }
-          </tr>)
+          </tr>
+          )
         }
       </tbody>
     </>
@@ -35,6 +37,7 @@ const TableBody = ({ data, columns }) => {
 
 TableBody.propTypes = {
   data: PropTypes.array.isRequired,
-  columns: PropTypes.object.isRequired
+  columns: PropTypes.object.isRequired,
+  searchFieldData: PropTypes.array
 };
 export default TableBody;
