@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { Link } from 'react-router-dom';
 
-const TableBody = ({ data, columns, searchFieldData }) => {
-  const isSearched = searchFieldData || data;
+const TableBody = ({ data, columns }) => {
+  // const isSearched = searchFieldData || data;
   const renderContent = (item, column) => {
     if (columns[column].component) {
       const component = columns[column].component;
@@ -18,7 +18,7 @@ const TableBody = ({ data, columns, searchFieldData }) => {
     <>
       <tbody>
         {
-          isSearched.map(item => <tr key={item._id}>
+          data.map(item => <tr key={item._id}>
             {
               Object.keys(columns).map(column => (
                 columns[column].name === 'Имя'
@@ -37,7 +37,6 @@ const TableBody = ({ data, columns, searchFieldData }) => {
 
 TableBody.propTypes = {
   data: PropTypes.array.isRequired,
-  columns: PropTypes.object.isRequired,
-  searchFieldData: PropTypes.array
+  columns: PropTypes.object.isRequired
 };
 export default TableBody;

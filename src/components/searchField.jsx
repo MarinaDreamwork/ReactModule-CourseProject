@@ -1,21 +1,20 @@
 import PropTypes from 'prop-types';
 
-const SearchField = ({ users, onSearchChange }) => {
+const SearchField = ({ onSearchChange, value }) => {
   const handleSearchChange = ({ target }) => {
-    if (target.value === '') return onSearchChange(null);
-    users.filter(user => user.name.toLowerCase().includes(target.value.trim().toLowerCase()) ? onSearchChange(user) : '');
+    onSearchChange(target.value);
   };
 
   return (
     <div className="mb-3">
-      <input type="text" className="form-control" placeholder="Search..." onChange={handleSearchChange}/>
+      <input type="text" className="form-control" placeholder="Search..." onChange={handleSearchChange} value={value}/>
     </div>
   );
 };
 
 SearchField.propTypes = {
-  users: PropTypes.array.isRequired,
-  onSearchChange: PropTypes.func.isRequired
+  onSearchChange: PropTypes.func.isRequired,
+  value: PropTypes.string
 };
 
 export default SearchField;

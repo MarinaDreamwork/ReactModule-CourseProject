@@ -27,7 +27,7 @@ UserTable.propTypes = {
   selectedSort: PropTypes.object.isRequired,
   onToggleBookMark: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
-  searchFieldData: PropTypes.array
+  searchFieldData: PropTypes.string
 };
 
 export default UserTable;
