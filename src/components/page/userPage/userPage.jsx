@@ -1,20 +1,14 @@
-import { useHistory, useParams } from 'react-router-dom';
-import api from '../api';
+import { NavLink } from 'react-router-dom';
+import API from '../../../api';
 import { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 
-const User = () => {
+const UserPage = ({ userId }) => {
   const [selectedUser, setSelectedUser] = useState([]);
-  const history = useHistory();
-  const params = useParams();
-  const { userId } = params;
-
-  const handleReturnAllUsers = () => {
-    history.push('/users');
-  };
 
   useEffect(() => {
-    api.users.getById(userId).then(data => setSelectedUser([data]));
-  }, [selectedUser]);
+    API.users.getById(userId).then(data => setSelectedUser([data]));
+  }, []);
 
   return (
     <>
@@ -28,12 +22,21 @@ const User = () => {
             }
             <p>completedMeetings: {user.completedMeetings}</p>
             <h3>Rate: {user.rate}</h3>
-            <button className='btn btn-dark' onClick={handleReturnAllUsers}>Все пользователи</button>
-          </div>))
+            <NavLink
+              to={`/users/${userId}/edit`}
+              className='btn btn-dark'>
+                Изменить
+            </NavLink>
+          </div>
+        ))
         : <p>Loading...</p>
       }
     </>
   );
 };
 
-export default User;
+UserPage.propTypes = {
+  userId: PropTypes.string
+};
+
+export default UserPage;

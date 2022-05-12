@@ -1,7 +1,6 @@
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import NavigationLinks from './components/navigationLinks';
-import User from './components/user';
-import Users from './components/users';
+import NavigationLinks from './components/ui/navigationLinks';
+import Users from './layout/users';
 import Login from './layout/login';
 import Main from './layout/main';
 
@@ -11,9 +10,8 @@ const App = () => {
       <NavigationLinks />
       <Switch>
         <Route exact path='/' component={Main} />
-        <Route path='/login' component={Login} />
-        <Route path='/users/:userId' render={(props) => <User {...props} />} />
-        <Route path='/users' component={Users} />
+        <Route path='/login/:type?' component={Login} />
+        <Route path='/users/:userId?' component={Users} />
       </Switch>
     </BrowserRouter>
   );

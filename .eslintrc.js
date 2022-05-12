@@ -18,6 +18,7 @@ module.exports = {
     'react'
   ],
   rules: {
+    'multiline-ternary': ['off'],
     indent: ['error', 2],
     semi: [2, 'always'],
     quotes: ['error', 'single'],

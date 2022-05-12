@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { paginate } from '../utils/paginate';
-import api from '../api';
-import Pagination from './pagination';
-import SearchStatus from './searchStatus';
-import GroupList from './groupList';
-import UserTable from './userTable';
+import { paginate } from '../../../utils/paginate';
+import api from '../../../api';
+import Pagination from '../../common/pagination';
+import SearchStatus from '../../ui/searchStatus';
+import GroupList from '../../common/groupList';
+import UserTable from '../../ui/userTable';
 import _ from 'lodash';
-import SearchField from './searchField';
+import SearchField from '../../searchField';
 
 const Users = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,16 +23,12 @@ const Users = () => {
   };
 
   const handleProfessionSelect = (item) => {
-    console.log('se', searchFieldData, searchFieldData !== '');
     if (searchFieldData !== '') setSearchFieldData('');
-    console.log(searchFieldData);
     setSelectedProf(item);
   };
 
   const handleSearchChange = (value) => {
-    console.log('value', value);
     setSearchFieldData(value);
-    console.log('searchFieldData after changing', searchFieldData);
   };
 
   const handleSort = (item) => {

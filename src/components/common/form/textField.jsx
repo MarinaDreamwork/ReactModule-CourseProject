@@ -11,6 +11,10 @@ const TextField = ({ label, type, value, onChange, name, error }) => {
   const getInputClasses = () => {
     return 'form-control' + (error ? ' is-invalid' : '');
   };
+  const handleChange = ({ target }) => {
+    onChange({ name: target.name, value: target.value });
+  };
+
   return (
     <div className='mb-4'>
       <label htmlFor={name}>{label}</label>
@@ -20,7 +24,7 @@ const TextField = ({ label, type, value, onChange, name, error }) => {
           id={name}
           type={showPassword ? 'text' : type}
           value={value}
-          onChange={onChange}
+          onChange={handleChange}
           name={name}
         />
         {type === 'password' && (<button type='button' className='btn btn-outline-secondary' onClick={toggleShowPassword}><i className={'bi bi-eye' + (showPassword ? '-slash' : '')}></i></button>)}
