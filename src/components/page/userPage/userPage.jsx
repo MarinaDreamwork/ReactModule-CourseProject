@@ -16,7 +16,7 @@ const UserPage = () => {
       { selectedUser.length > 0
         ? selectedUser.map(user => (
           <div key={user._id}>
-            <h2>{user ? user.name : ''}</h2>
+            <h2>{user.name}</h2>
             <h3>Профессия: {user.profession.name}</h3>
             {
               user.qualities.map(quality => <p key={quality._id} className={'m-2 badge bg-' + quality.color}>{quality.name}</p>)
