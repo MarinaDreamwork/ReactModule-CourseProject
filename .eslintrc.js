@@ -19,10 +19,14 @@ module.exports = {
   ],
   rules: {
     'multiline-ternary': ['off'],
-    indent: ['error', 2],
+    indent: [0, 2],
     semi: [2, 'always'],
     quotes: ['error', 'single'],
     'react/react-in-jsx-scope': 'off',
-    'eol-last': 2
+    'eol-last': 2,
+    'space-before-function-paren': [
+      'error',
+      { anonymous: 'always', named: 'never' }
+    ]
   }
 };
