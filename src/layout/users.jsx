@@ -11,9 +11,17 @@ const Users = () => {
   return (
     <>
       {userId
-        ? (isPathname ? (<Switch>
-          <Route path='/users/:userId?/edit' render={(...props) => <EditUserPage {...props} userId={userId} />} />
-        </Switch>) : <UserPage userId={userId} />) : <UsersListPage />}
+        ? (isPathname ? (
+            <Switch>
+              <Route
+                path='/users/:userId?/edit'
+                render={(...props) => <EditUserPage
+                                        {...props}
+                                        userId={userId}
+                                      />}
+              />
+            </Switch>) : <UserPage userId={userId} />)
+        : <UsersListPage />}
     </>
   );
 };

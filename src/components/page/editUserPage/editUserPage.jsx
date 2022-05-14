@@ -9,7 +9,13 @@ import { validator } from '../../../utils/validator';
 import { useHistory } from 'react-router-dom';
 
 const EditUserPage = ({ userId }) => {
-  const [data, setData] = useState();
+  const [data, setData] = useState({
+    name: '',
+    email: '',
+    profession: '',
+    sex: 'male',
+    qualities: []
+  });
   const [errors, setErrors] = useState({});
   const [professions, setProfessions] = useState([]);
   const [qualities, setQualities] = useState([]);
@@ -118,6 +124,15 @@ const EditUserPage = ({ userId }) => {
   };
 
   useEffect(() => {
+    API.users.getById(userId).then(({ profession, qualities, ...data }) => {
+      setData(prevState => ({
+        ...prevState,
+        ...data,
+        profession: profession._id,
+        qualities: qualities.map(quality => ({ label: quality.name, value: quality._id, color: quality.color }))
+      }));
+    });
+    console.log('data', data);
     API.professions.fetchAll().then((data) => {
       const professionsList = Object.keys(data).map((professionName) => ({
         label: data[professionName].name,
@@ -133,22 +148,13 @@ const EditUserPage = ({ userId }) => {
       }));
       setQualities(qualitiesList);
     });
-    API.users.getById(userId).then((data) => {
-      console.log('data', data);
-      setData({
-        name: data.name,
-        email: data.email,
-        profession: data.profession.name,
-        sex: data.sex,
-        qualities: data.qualities.map(quality => ({ label: quality.name, value: quality._id, color: quality.color }))
-      });
-    });
   }, []);
 
   return (
     <>
-      { data
-        ? (<div className='container mt-5'>
+      {
+        data.profession
+        ? <div className='container mt-5'>
           <div className='row'>
             <div className='col-md-6 offset-md-3 shadow p-4'>
               <form onSubmit={handleSubmit}>
@@ -203,8 +209,8 @@ const EditUserPage = ({ userId }) => {
               </form>
             </div>
           </div>
-        </div>) : <p>Loading...</p>
-      };
+        </div> : <p>Loading...</p>
+      }
     </>
   );
 };

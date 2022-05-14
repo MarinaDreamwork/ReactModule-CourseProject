@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react';
-import { NavLink, useParams } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import API from '../../../api';
 import PropTypes from 'prop-types';
 
-const UserPage = () => {
+const UserPage = ({ userId }) => {
   const [selectedUser, setSelectedUser] = useState([]);
-  const { userId } = useParams();
+  // const { userId } = useParams();
   useEffect(() => {
     API.users.getById(userId).then(data => setSelectedUser([data]));
   }, []);
-  console.log('selectedUser', selectedUser);
 
   return (
     <>
