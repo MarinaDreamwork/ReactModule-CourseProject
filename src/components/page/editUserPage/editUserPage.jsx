@@ -22,6 +22,10 @@ const EditUserPage = ({ userId }) => {
 
   const history = useHistory();
 
+  const backPreviousPage = () => {
+    return history.goBack();
+  };
+
   const handleChange = (target) => {
     setData((prevState) => ({
       ...prevState,
@@ -39,7 +43,7 @@ const EditUserPage = ({ userId }) => {
       profession: getProfessionById(profession),
       qualities: getQualities(qualities)
     });
-    history.goBack();
+    backPreviousPage();
     // console.log({
     //   ...data,
     //   profession: getProfessionById(profession),
@@ -152,6 +156,9 @@ const EditUserPage = ({ userId }) => {
 
   return (
     <>
+      <div className='container'>
+        <button className='btn btn-primary' onClick={backPreviousPage}><i className="bi bi-caret-left"></i>Назад</button>
+      </div>
       {
         data.profession
         ? <div className='container mt-5'>
