@@ -21,7 +21,7 @@ const ChooseField = ({ label, value, onChange, defaultOption, options, error, na
         id={name}
         value={value}
         onChange={handleChange}
-        name='profession'>
+        name={name}>
         <option disabled value="">{defaultOption}</option>
         {
           optionArray.length > 0 &&

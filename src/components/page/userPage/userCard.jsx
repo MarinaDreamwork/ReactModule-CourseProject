@@ -4,14 +4,8 @@ const UserCard = ({ user, onSettingsClick }) => {
   return (
     <div className='card mb-3'>
       <div className='card-body'>
-        <button className='position-absolute top-0 end-0 btn btn-light btn-sm'>
-          <i className='bi bi-gear' onClick={onSettingsClick}>
-            {/* <NavLink
-                  to={`/users/${userId}/edit`}
-                  className='btn btn-dark'>
-                    Назад
-                </NavLink> */}
-          </i>
+        <button className='position-absolute top-0 end-0 btn btn-light btn-sm' onClick={onSettingsClick}>
+          <i className='bi bi-gear'></i>
         </button>
         <div className='d-flex flex-column align-items-center text-center position-relative'>
         <img

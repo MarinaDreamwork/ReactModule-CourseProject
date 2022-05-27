@@ -9,38 +9,37 @@ import MeetingsCard from './meetingsCard';
 import UserCard from './userCard';
 
 const UserPage = ({ userId }) => {
-  const [selectedUser, setSelectedUser] = useState([]);
+  const [selectedUser, setSelectedUser] = useState();
   // const { userId } = useParams();
   const history = useHistory();
   useEffect(() => {
-    API.users.getById(userId).then(data => setSelectedUser([data]));
+    API.users.getById(userId).then(data => setSelectedUser(data));
   }, []);
-
   const handleSettingsClick = () => {
     history.push(`/users/${userId}/edit`);
   };
+  console.log('select', selectedUser);
 
-  return (
-    <>
-      { selectedUser.length > 0
-        ? selectedUser.map(user => (
-            <div key={user._id} className='container'>
-              <div className='row gutters-sm'>
-                <div className='col-md-4 mb-3'>
-                  <UserCard user={user} onSettingsClick={handleSettingsClick}/>
-                  <QualitiesCard user={user} />
-                  <MeetingsCard user={user} />
-                </div>
-                <div className='col-md-8'>
-                  <CommentsListComponent userId={userId} />
-                </div>
-            </div>
-            </div>
-         ))
-         : <p>Loading...</p>
-      }
-    </>
-  );
+  if (selectedUser) {
+    return (
+      <div className='container'>
+        <div className='row gutters-sm'>
+          <div className='col-md-4 mb-3'>
+            <UserCard user={selectedUser} onSettingsClick={handleSettingsClick}/>
+            <QualitiesCard qualities={selectedUser.qualities} />
+            <MeetingsCard meetings={selectedUser.completedMeetings} />
+          </div>
+          <div className='col-md-8'>
+            <CommentsListComponent userId={userId}/>
+          </div>
+        </div>
+      </div>
+    );
+  } else {
+    return (
+      <p>Loading...</p>
+    );
+  };
 };
 
 UserPage.propTypes = {

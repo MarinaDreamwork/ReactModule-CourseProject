@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
+import Qualities from '../../ui/qualities/index';
 
-const QualitiesCard = ({ user }) => {
+const QualitiesCard = ({ qualities }) => {
   return (
     <div className='card mb-3'>
       <div className='card-body d-flex flex-column justify-content-center text-center'>
@@ -8,9 +9,7 @@ const QualitiesCard = ({ user }) => {
           <span>Qualities</span>
         </h5>
         <p className='card-text'>
-          {
-            user.qualities.map(quality => <p key={quality._id} className={'m-2 badge bg-' + quality.color}>{quality.name}</p>)
-          }
+         <Qualities qualities={qualities}/>
         </p>
       </div>
     </div>
@@ -18,7 +17,7 @@ const QualitiesCard = ({ user }) => {
 };
 
 QualitiesCard.propTypes = {
-  user: PropTypes.object.isRequired
+  qualities: PropTypes.array.isRequired
 };
 
 export default QualitiesCard;

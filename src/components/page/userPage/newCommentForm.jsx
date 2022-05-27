@@ -1,41 +1,101 @@
-// import { useEffect } from 'react';
-// import API from '../../../api';
+import { useState, useEffect } from 'react';
+import API from '../../../api';
 import PropTypes from 'prop-types';
+import ChooseField from '../../common/form/chooseField';
+import { validator } from '../../../utils/validator';
+import TextAreaField from '../../common/form/textAreaField';
 
-const NewCommentForm = ({ onHandleChange, onHandleSubmit, senders, isValid, data }) => {
+const NewCommentForm = ({ onHandleSubmit, userId }) => {
+  const initialState = { pageId: userId, userId: '', content: '' };
+  const [data, setData] = useState(initialState);
+  const [errors, setErrors] = useState({});
+  const [senders, setSenders] = useState([]);
+
+  const handleChange = (target) => {
+    console.log('target', target);
+    setData((prevState) => ({
+      ...prevState,
+      [target.name]: target.value
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const isValid = validate();
+    if (!isValid) return;
+    onHandleSubmit(data);
+    // обнуление
+    setData(initialState);
+    setErrors({});
+  };
+
+  const validatorConfig = {
+    userId: {
+      isRequired: {
+        message: 'Необходимо выбрать отправителя сообщения'
+      }
+    },
+    content: {
+      isRequired: {
+        message: 'Необходимо выбрать отправителя сообщения'
+      }
+    }
+  };
+
+  const validate = () => {
+    const errors = validator(data, validatorConfig);
+    setErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  useEffect(() => {
+    validate();
+  }, [data]);
+
+    useEffect(() => {
+    API.users.fetchAll().then(setSenders);
+    // API.comments.fetchCommentsForUser(userId).then(data => setComments(data));
+  }, []);
+
+  const arrayOfSenders = senders &&
+    Object.keys(senders).map((userId) => ({
+      label: senders[userId].name,
+      value: senders[userId]._id
+    }));
+
   return (
     <>
-    <form onSubmit={onHandleSubmit}>
-      <select value={data.userId} className="form-select" aria-label="Default select example" name='userId' onChange={onHandleChange}>
-        <option defaultValue='Выберете пользователя'>Выберете пользователя</option>
-        {
-          senders.map(sender => <option
-            key={sender._id}
-            value={sender._id}
-            name='userId'
-            >
-              {sender.name}
-            </option>
-          )
-        }
-      </select>
-      <div className="mb-3">
-        <label htmlFor="exampleFormControlTextarea1" className="form-label">Сообщение</label>
-        <textarea className="form-control" id="exampleFormControlTextarea1" rows="3" name='content' onChange={onHandleChange} value={data.content}></textarea>
-      </div>
-      <input className='btn btn-primary d-flex justify-content-end' type='submit' value='Опубликовать' disabled={!isValid}/>
+      <form onSubmit={handleSubmit}>
+        <ChooseField
+          value={data.userId}
+          onChange={handleChange}
+          options={arrayOfSenders}
+          defaultOption='Выберете пользователя'
+          name='userId'
+          error={errors.userId}/>
+        <div className="mb-3">
+          <TextAreaField
+            label='Сообщение'
+            name='content'
+            value={data.content}
+            onChange={handleChange}
+            error={errors.content}
+          />
+        </div>
+        <div className='d-flex justify-content-end'>
+          <button className='btn btn-primary'>
+            Опубликовать
+          </button>
+        </div>
       </form>
     </>
   );
 };
 
 NewCommentForm.propTypes = {
-  onHandleChange: PropTypes.func,
   onHandleSubmit: PropTypes.func,
-  senders: PropTypes.array,
-  setSenders: PropTypes.func,
-  isValid: PropTypes.bool,
-  data: PropTypes.object
+  arrayOfSenders: PropTypes.array,
+  userId: PropTypes.string
 };
 
 export default NewCommentForm;
