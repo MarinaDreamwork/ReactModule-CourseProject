@@ -2,12 +2,13 @@ import PropTypes from 'prop-types';
 import Bookmark from '../common/bookMark';
 import Qualities from './qualities/qualitiesList';
 import Table from '../common/table';
+import Profession from './Profession';
 
 const UserTable = ({ users, onSort, selectedSort, onToggleBookMark, onDelete, searchFieldData }) => {
   const columns = {
     name: { path: 'name', name: 'Имя' },
     qualities: { name: 'Качества', component: (user) => <Qualities qualities={user.qualities} /> },
-    profession: { path: 'profession.name', name: 'Профессия' },
+    profession: { name: 'Профессия', component: (user) => <Profession id={user.profession} /> },
     completedMeetings: { path: 'completedMeetings', name: 'Встретился, раз' },
     rate: { path: 'rate', name: 'Оценка' },
     bookmark: { path: 'bookmark', name: 'Избранное', component: (user) => (<Bookmark onToggleBookMark={onToggleBookMark} user={user}/>) },

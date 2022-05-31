@@ -7,12 +7,14 @@ import GroupList from '../../common/groupList';
 import UserTable from '../../ui/userTable';
 import _ from 'lodash';
 import SearchField from '../../searchField';
+import { useUser } from '../../../hooks/useUser';
 
-const Users = () => {
+const UsersListPage = () => {
+  const { users } = useUser();
   const [currentPage, setCurrentPage] = useState(1);
   const [professions, setProfessions] = useState();
   const [selectedProf, setSelectedProf] = useState();
-  const [users, setUsers] = useState();
+  // const [users, setUsers] = useState();
   const [searchFieldData, setSearchFieldData] = useState('');
   const pageSize = 6;
 
@@ -43,9 +45,9 @@ const Users = () => {
     setCurrentPage(1);
   }, [selectedProf, searchFieldData]);
 
-  useEffect(() => {
-    api.users.fetchAll().then(data => setUsers(data));
-  }, []);
+  // useEffect(() => {
+  //   api.users.fetchAll().then(data => setUsers(data));
+  // }, []);
 
   const clearFilter = () => setSelectedProf();
   const redExpSearchData = new RegExp(`(?:${searchFieldData})`, 'gi');
@@ -63,7 +65,8 @@ const Users = () => {
     const partOfUsers = paginate(sortedUsers, pageSize, currentPage);
 
     const handleDelete = (userId) => {
-      setUsers(prevState => prevState.filter(td => td._id !== userId));
+      console.log(userId);
+      // setUsers(prevState => prevState.filter(td => td._id !== userId));
     };
 
     const onToggleBookMark = (id) => {
@@ -77,7 +80,8 @@ const Users = () => {
         };
         return { ...user };
       });
-      setUsers(bookmarkedUsers);
+      // setUsers(bookmarkedUsers);
+      console.log(bookmarkedUsers);
     };
 
     return (
@@ -108,4 +112,4 @@ const Users = () => {
   return <p>Loading...</p>;
 };
 
-export default Users;
+export default UsersListPage;

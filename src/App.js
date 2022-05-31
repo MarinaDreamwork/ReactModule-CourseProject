@@ -1,19 +1,25 @@
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import NavigationLinks from './components/ui/navigationLinks';
 import Users from './layout/users';
 import Login from './layout/login';
 import Main from './layout/main';
+import { ToastContainer } from 'react-toastify';
+import { ProfessionProvider } from './hooks/useProfession';
 
 const App = () => {
   return (
-    <BrowserRouter>
+    <div>
       <NavigationLinks />
+        <ProfessionProvider>
       <Switch>
-        <Route exact path='/' component={Main} />
+        <Route path='/users/:userId?/:edit?'component={Users}/>
         <Route path='/login/:type?' component={Login} />
-        <Route path='/users/:userId?' component={Users} />
+        <Route path='/' exact component={Main} />
+        <Redirect to='/' />
       </Switch>
-    </BrowserRouter>
+      </ProfessionProvider>
+      <ToastContainer />
+    </div>
   );
 };
 
