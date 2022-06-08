@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import professionService from '../services/profession.service';
+import { toast } from 'react-toastify';
 
 const ProfessionContext = React.createContext();
 
@@ -11,7 +12,7 @@ export const useProfession = () => {
 export const ProfessionProvider = ({ children }) => {
   const [professions, setProfessions] = useState([]);
   const [isLoading, setLoading] = useState(true);
-  const [setError] = useState(null);
+  const [error, setError] = useState(null);
 
   const errorCatcher = (error) => {
     setError(error);
@@ -34,6 +35,13 @@ export const ProfessionProvider = ({ children }) => {
   useEffect(() => {
     getProfessions();
   }, []);
+
+    useEffect(() => {
+    if (error !== null) {
+      toast(error);
+      setError(null);
+    }
+  }, [error]);
 
   return (
     <ProfessionContext.Provider value={{ isLoading, professions, getProfessionById }}>

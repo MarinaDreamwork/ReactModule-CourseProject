@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+
 const ChooseField = ({ label, value, onChange, defaultOption, options, error, name }) => {
   const optionArray =
     !Array.isArray(options) && typeof (options) === 'object'

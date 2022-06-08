@@ -4,6 +4,7 @@ import { useQuality } from '../../../hooks/useQuality';
 
 const QualitiesList = ({ qualities }) => {
   const { isLoading, getQualitiesById } = useQuality();
+
   if (!isLoading) {
     return (
       <>

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import LoginForm from '../components/ui/loginForm';
 import RegisterForm from '../components/ui/registerForm';
+import { QualityProvider } from '../hooks/useQuality';
 
 const Login = () => {
   const { type } = useParams();
@@ -15,11 +16,11 @@ const Login = () => {
       <div className='row'>
         <div className='col-md-6 offset-md-3 shadow p-4'>
           { formType === 'register'
-            ? <><RegisterForm />
+            ? <QualityProvider><RegisterForm />
               <p>Already have an account?
                 <a role='button' onClick={toggleFormType}> Sign In</a>
               </p>
-            </>
+            </QualityProvider>
             : <><LoginForm />
               <p>Do not have an account?
                 <a role='button' onClick={toggleFormType}> Sign Up</a>

@@ -5,19 +5,22 @@ import Login from './layout/login';
 import Main from './layout/main';
 import { ToastContainer } from 'react-toastify';
 import { ProfessionProvider } from './hooks/useProfession';
+import { AuthProvider } from './hooks/useAuth';
 
 const App = () => {
   return (
     <div>
-      <NavigationLinks />
-        <ProfessionProvider>
-      <Switch>
-        <Route path='/users/:userId?/:edit?'component={Users}/>
-        <Route path='/login/:type?' component={Login} />
-        <Route path='/' exact component={Main} />
-        <Redirect to='/' />
-      </Switch>
-      </ProfessionProvider>
+      <AuthProvider>
+        <NavigationLinks />
+          <ProfessionProvider>
+          <Switch>
+            <Route path='/users/:userId?/:edit?'component={Users}/>
+            <Route path='/login/:type?' component={Login} />
+            <Route path='/' exact component={Main} />
+            <Redirect to='/' />
+          </Switch>
+          </ProfessionProvider>
+        </AuthProvider>
       <ToastContainer />
     </div>
   );

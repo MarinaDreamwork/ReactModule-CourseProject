@@ -8,9 +8,12 @@ import UserTable from '../../ui/userTable';
 import _ from 'lodash';
 import SearchField from '../../searchField';
 import { useUser } from '../../../hooks/useUser';
+import { useQuality } from '../../../hooks/useQuality';
 
 const UsersListPage = () => {
   const { users } = useUser();
+  const { qualities } = useQuality();
+  console.log('qual', qualities);
   const [currentPage, setCurrentPage] = useState(1);
   const [professions, setProfessions] = useState();
   const [selectedProf, setSelectedProf] = useState();
