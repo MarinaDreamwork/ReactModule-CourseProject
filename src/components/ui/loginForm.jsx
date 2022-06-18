@@ -11,6 +11,12 @@ const LoginForm = () => {
 
   const { logIn } = useAuth();
   const history = useHistory();
+  console.log(history.location.state);
+
+  // const checkUsers = (data) => {
+  //   const filteredUser = users.filter(user => user.email === data.email);
+  //   console.log('filteredUser', filteredUser);
+  // };
 
   const handleChange = (target) => {
     setData((prevState) => ({
@@ -25,8 +31,11 @@ const LoginForm = () => {
     if (!isValid) return;
     console.log(data);
     try {
-      await logIn(data);
-      history.push('/');
+      // getUserByEmailPassword(data);
+      logIn(data);
+      history.push(history.location.state.from.pathName
+        ? history.location.state.from.pathName
+        : '/');
     } catch (error) {
       setErrors(error);
     };

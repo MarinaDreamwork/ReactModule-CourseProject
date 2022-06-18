@@ -13,6 +13,7 @@ export const UserProvider = ({ children }) => {
   const [users, setUsers] = useState([]);
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  console.log('users', users);
 
   async function getUsers() {
     try {
@@ -23,6 +24,21 @@ export const UserProvider = ({ children }) => {
       errorCatcher(error);
     }
   };
+
+  function getUserById(userId) {
+    return users.find(u => u._id === userId);
+  }
+
+  async function checkUserByEmailPassword({ email, password }) {
+    console.log('email:', email, 'password:', password);
+     try {
+      const { content } = await userService.get();
+      const isExistUser = content.filter(user => user.email === email && user.password === password);
+      console.log('isExist', isExistUser);
+    } catch (error) {
+      errorCatcher(error);
+    }
+  }
 
   function errorCatcher(error) {
     const { message } = error.response.data;
@@ -41,7 +57,7 @@ export const UserProvider = ({ children }) => {
   }, [error]);
 
   return (
-    <UserContext.Provider value={{ users }}>
+    <UserContext.Provider value={{ users, getUserById, checkUserByEmailPassword, getUsers }}>
       {!isLoading ? children : <h1>is loading...</h1>}
     </UserContext.Provider>
   );

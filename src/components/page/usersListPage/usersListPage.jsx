@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { paginate } from '../../../utils/paginate';
-import api from '../../../api';
 import Pagination from '../../common/pagination';
 import SearchStatus from '../../ui/searchStatus';
 import GroupList from '../../common/groupList';
@@ -9,13 +8,17 @@ import _ from 'lodash';
 import SearchField from '../../searchField';
 import { useUser } from '../../../hooks/useUser';
 import { useQuality } from '../../../hooks/useQuality';
+import { useProfession } from '../../../hooks/useProfession';
+import { useAuth } from '../../../hooks/useAuth';
 
 const UsersListPage = () => {
   const { users } = useUser();
   const { qualities } = useQuality();
+  const { currentUser } = useAuth();
   console.log('qual', qualities);
   const [currentPage, setCurrentPage] = useState(1);
-  const [professions, setProfessions] = useState();
+  const { professionLoading, professions } = useProfession();
+  console.log('prof', professionLoading);
   const [selectedProf, setSelectedProf] = useState();
   // const [users, setUsers] = useState();
   const [searchFieldData, setSearchFieldData] = useState('');
@@ -41,10 +44,6 @@ const UsersListPage = () => {
   };
 
   useEffect(() => {
-    api.professions.fetchAll().then(data => setProfessions(data));
-  }, []);
-
-  useEffect(() => {
     setCurrentPage(1);
   }, [selectedProf, searchFieldData]);
 
@@ -55,13 +54,17 @@ const UsersListPage = () => {
   const clearFilter = () => setSelectedProf();
   const redExpSearchData = new RegExp(`(?:${searchFieldData})`, 'gi');
   if (users) {
-    const filteredUsers = searchFieldData
-      ? users.filter(user => user.name.match(redExpSearchData))
+    function filterUsers(data) {
+      const filteredUsers = searchFieldData
+      ? data.filter(user => user.name.match(redExpSearchData))
       : selectedProf
-        ? users.filter((user) => {
+        ? data.filter((user) => {
           return JSON.stringify(user.profession) === JSON.stringify(selectedProf);
         })
-        : users;
+        : data;
+        return filteredUsers.filter(user => user._id !== currentUser._id);
+    }
+    const filteredUsers = filterUsers(users);
 
     const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order]);
     const count = filteredUsers.length;
@@ -89,7 +92,7 @@ const UsersListPage = () => {
 
     return (
       <div className='d-flex'>
-        {professions && (
+        {(professions && !professionLoading) && (
           <div className='d-flex flex-column flex-shrink-0 p-3 pt-4'>
             <GroupList items={professions} onItemSelect={handleProfessionSelect} currentItem={selectedProf} onSearchChange={handleSearchChange}/>
             <button className='btn btn-secondary mt-2' onClick={clearFilter}>Очистить</button>

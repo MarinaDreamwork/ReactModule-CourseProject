@@ -21,7 +21,11 @@ module.exports = {
     'multiline-ternary': ['off'],
     indent: [0, 2],
     semi: [2, 'always'],
-    quotes: ['error', 'single'],
+    quotes: ['error', 'single',
+      {
+        allowTemplateLiterals: true
+      }
+    ],
     'react/react-in-jsx-scope': 'off',
     'eol-last': 2,
     'space-before-function-paren': [

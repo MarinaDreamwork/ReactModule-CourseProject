@@ -1,15 +1,14 @@
 import { useState, useEffect } from 'react';
-import API from '../../../api';
 import PropTypes from 'prop-types';
-import ChooseField from '../../common/form/chooseField';
 import { validator } from '../../../utils/validator';
 import TextAreaField from '../../common/form/textAreaField';
+// import { useComment } from '../../../hooks/useComments';
 
 const NewCommentForm = ({ onHandleSubmit, userId }) => {
   const initialState = { pageId: userId, userId: '', content: '' };
-  const [data, setData] = useState(initialState);
+  const [data, setData] = useState({});
   const [errors, setErrors] = useState({});
-  const [senders, setSenders] = useState([]);
+  // const [senders, setSenders] = useState([]);
 
   const handleChange = (target) => {
     console.log('target', target);
@@ -23,21 +22,18 @@ const NewCommentForm = ({ onHandleSubmit, userId }) => {
     e.preventDefault();
     const isValid = validate();
     if (!isValid) return;
+    console.log('data', data);
     onHandleSubmit(data);
+
     // обнуление
     setData(initialState);
     setErrors({});
   };
 
   const validatorConfig = {
-    userId: {
-      isRequired: {
-        message: 'Необходимо выбрать отправителя сообщения'
-      }
-    },
     content: {
       isRequired: {
-        message: 'Необходимо выбрать отправителя сообщения'
+        message: 'Поле сообщение должно быть заполнено'
       }
     }
   };
@@ -53,31 +49,18 @@ const NewCommentForm = ({ onHandleSubmit, userId }) => {
   }, [data]);
 
     useEffect(() => {
-    API.users.fetchAll().then(setSenders);
+    // API.users.fetchAll().then(setSenders);
     // API.comments.fetchCommentsForUser(userId).then(data => setComments(data));
   }, []);
-
-  const arrayOfSenders = senders &&
-    Object.keys(senders).map((userId) => ({
-      label: senders[userId].name,
-      value: senders[userId]._id
-    }));
 
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <ChooseField
-          value={data.userId}
-          onChange={handleChange}
-          options={arrayOfSenders}
-          defaultOption='Выберете пользователя'
-          name='userId'
-          error={errors.userId}/>
         <div className="mb-3">
           <TextAreaField
             label='Сообщение'
             name='content'
-            value={data.content}
+            value={data.content || ''}
             onChange={handleChange}
             error={errors.content}
           />

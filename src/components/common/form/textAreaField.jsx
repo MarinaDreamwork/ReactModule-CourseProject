@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 
 const TextAreaField = ({ label, value, onChange, name, error }) => {
-  console.log('name:', name);
   const getInputClasses = () => {
     return 'form-control' + (error ? ' is-invalid' : '');
   };

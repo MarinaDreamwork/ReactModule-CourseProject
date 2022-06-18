@@ -11,7 +11,7 @@ export const useProfession = () => {
 
 export const ProfessionProvider = ({ children }) => {
   const [professions, setProfessions] = useState([]);
-  const [isLoading, setLoading] = useState(true);
+  const [professionLoading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const errorCatcher = (error) => {
@@ -44,8 +44,8 @@ export const ProfessionProvider = ({ children }) => {
   }, [error]);
 
   return (
-    <ProfessionContext.Provider value={{ isLoading, professions, getProfessionById }}>
-      {children}
+    <ProfessionContext.Provider value={{ professionLoading, professions, getProfessionById }}>
+      {!professionLoading ? children : 'isLoading...'}
     </ProfessionContext.Provider>
   );
 };

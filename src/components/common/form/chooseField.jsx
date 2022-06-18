@@ -44,7 +44,7 @@ const ChooseField = ({ label, value, onChange, defaultOption, options, error, na
 
 ChooseField.propTypes = {
   label: PropTypes.string,
-  value: PropTypes.string,
+  value: PropTypes.array,
   onChange: PropTypes.func,
   defaultOption: PropTypes.string,
   options: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),

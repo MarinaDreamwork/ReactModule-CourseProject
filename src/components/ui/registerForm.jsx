@@ -11,7 +11,15 @@ import { useAuth } from '../../hooks/useAuth';
 import { useHistory } from 'react-router-dom';
 
 const RegisterForm = () => {
-  const [data, setData] = useState({ email: '', password: '', profession: '', sex: 'male', qualities: [], licence: false });
+  const [data, setData] = useState({
+    email: '',
+    name: '',
+    password: '',
+    profession: '',
+    sex: 'male',
+    qualities: [],
+    licence: false
+  });
   const [errors, setErrors] = useState({});
 
   const history = useHistory();
@@ -78,6 +86,15 @@ const RegisterForm = () => {
         message: 'Email введен некорректно'
       }
     },
+    name: {
+      isRequired: {
+        message: 'Имя обязательно для заполнения'
+      },
+      min: {
+        message: 'Имя должно содержать не менее 3-х символов',
+        value: 3
+      }
+    },
     password: {
       isRequired: {
         message: 'Пароль обязателен для заполнения'
@@ -141,6 +158,13 @@ const RegisterForm = () => {
         onChange={handleChange}
         name='email'
         error={errors.email}
+      />
+      <TextField
+        label='Имя'
+        value={data.name}
+        onChange={handleChange}
+        name='name'
+        error={errors.name}
       />
       <TextField
         label='Пароль'

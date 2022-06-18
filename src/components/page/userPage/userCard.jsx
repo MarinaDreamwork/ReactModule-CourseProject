@@ -1,19 +1,22 @@
 import PropTypes from 'prop-types';
+import { useAuth } from '../../../hooks/useAuth';
+import { useUser } from '../../../hooks/useUser';
 
-const UserCard = ({ user, onSettingsClick }) => {
+const UserCard = ({ userId, onSettingsClick }) => {
+  const { getUserById } = useUser();
+  const { currentUser } = useAuth();
+  const user = getUserById(userId);
   return (
     <div className='card mb-3'>
       <div className='card-body'>
-        <button className='position-absolute top-0 end-0 btn btn-light btn-sm' onClick={onSettingsClick}>
-          <i className='bi bi-gear'></i>
-        </button>
+        { currentUser._id === user._id && (
+          <button className='position-absolute top-0 end-0 btn btn-light btn-sm' onClick={onSettingsClick}>
+            <i className='bi bi-gear'></i>
+          </button>)
+        }
         <div className='d-flex flex-column align-items-center text-center position-relative'>
         <img
-          src={`https://avatars.dicebear.com/api/avataaars/${(
-          Math.random() + 1
-          )
-          .toString(36)
-          .substring(7)}.svg`}
+          src={user.image}
           className='rounded-circle shadow-1-strong me-3'
           alt='avatar'
           width='65'
@@ -35,7 +38,7 @@ const UserCard = ({ user, onSettingsClick }) => {
 };
 
 UserCard.propTypes = {
-  user: PropTypes.object.isRequired,
+  userId: PropTypes.string.isRequired,
   onSettingsClick: PropTypes.func.isRequired
 };
 
