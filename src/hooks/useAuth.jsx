@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import axios from 'axios';
 import userService from '../services/user.service';
 import { toast } from 'react-toastify';
 import { localStorageService } from '../services/localStorage.service';
 import { useHistory } from 'react-router-dom';
+import axios from 'axios';
 
 export const httpAuth = axios.create({
   baseURL: 'https://identitytoolkit.googleapis.com/v1/',
@@ -33,7 +33,6 @@ export const AuthProvider = ({ children }) => {
   async function signUp({ email, password, ...rest }) {
     try {
       const { data } = await httpAuth.post('accounts:signUp', { email, password, returnSecureToken: true });
-      console.log('post', data);
       localStorageService.setTokens(data);
       await createUser({
         _id: data.localId,
@@ -99,11 +98,10 @@ export const AuthProvider = ({ children }) => {
   };
 
    async function updateUserData(updatedData) {
-    console.log('updatedData', updatedData);
     try {
       const { content } = await userService.updateCurrentUser(updatedData);
       setCurrentUser(content);
-      await getUserData();
+      // await getUserData();
       setLoading(false);
     } catch (error) {
       errorCatcher(error);

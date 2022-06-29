@@ -4,22 +4,17 @@ import Users from './layout/users';
 import Login from './layout/login';
 import Main from './layout/main';
 import { ToastContainer } from 'react-toastify';
-import { ProfessionProvider } from './hooks/useProfession';
-import { AuthProvider } from './hooks/useAuth';
-import { UserProvider } from './hooks/useUser';
+
 import ProtectedRoute from './components/common/protectedRoute';
 import LogOut from './layout/logout';
-import { QualityProvider } from './hooks/useQuality';
+import AppLoader from './components/HOC/appLoader';
 
 const App = () => {
   return (
     <div>
-      <AuthProvider>
+      <AppLoader>
         <NavigationLinks />
-        <QualityProvider>
-          <ProfessionProvider>
-            <UserProvider>
-          <Switch>
+           <Switch>
             <ProtectedRoute
               path='/users/:userId?/:edit?'
               component={Users}
@@ -29,10 +24,7 @@ const App = () => {
             <Route path='/' exact component={Main} />
             <Redirect to='/' />
           </Switch>
-          </UserProvider>
-          </ProfessionProvider>
-          </QualityProvider>
-        </AuthProvider>
+        </AppLoader>
       <ToastContainer />
     </div>
   );

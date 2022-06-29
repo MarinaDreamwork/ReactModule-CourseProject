@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
-import { useAuth } from '../../../hooks/useAuth';
-import { useUser } from '../../../hooks/useUser';
+import { useSelector } from 'react-redux';
+import { getCurrentUserId, getUserById } from '../../../store/users';
 // import { useState } from 'react';
 // import API from '../../../api';
 import { getDate } from '../../../utils/getDate';
@@ -12,15 +12,8 @@ const Comment = ({
     userId,
     onDeleteClick
 }) => {
-  const { getUserById } = useUser();
-  const user = getUserById(userId);
-
-  const { currentUser } = useAuth();
-
-  // const getName = (id) => {
-  //   const nameObj = JSON.parse(localStorage.getItem('users')).filter(user => (id === user._id));
-  //   return nameObj[0].name;
-  // };
+  const user = useSelector(getUserById(userId));
+  const currentUserId = useSelector(getCurrentUserId());
 
   return (
     <div className='bg-light card-body mb-3'>
@@ -43,7 +36,7 @@ const Comment = ({
                       {' ' + getDate(created)}
                     </span>
                   </p>
-                  { currentUser._id === userId && (
+                  { user._id === currentUserId && (
                     <button className='btn btn-sm text-primary d-flex align-items-center' onClick={() => onDeleteClick(id)}>
                       <i className='bi bi-x-lg'></i>
                     </button>)

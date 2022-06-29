@@ -6,21 +6,17 @@ import GroupList from '../../common/groupList';
 import UserTable from '../../ui/userTable';
 import _ from 'lodash';
 import SearchField from '../../searchField';
-import { useUser } from '../../../hooks/useUser';
-import { useQuality } from '../../../hooks/useQuality';
-import { useProfession } from '../../../hooks/useProfession';
-import { useAuth } from '../../../hooks/useAuth';
+import { getProfessionLoading, getProfessions } from '../../../store/profession';
+import { useSelector } from 'react-redux';
+import { getCurrentUserId, getUsersList } from '../../../store/users';
 
 const UsersListPage = () => {
-  const { users } = useUser();
-  const { qualities } = useQuality();
-  const { currentUser } = useAuth();
-  console.log('qual', qualities);
+  const users = useSelector(getUsersList());
+  const professions = useSelector(getProfessions());
+  const professionLoading = useSelector(getProfessionLoading());
+  const currentUserId = useSelector(getCurrentUserId());
   const [currentPage, setCurrentPage] = useState(1);
-  const { professionLoading, professions } = useProfession();
-  console.log('prof', professionLoading);
   const [selectedProf, setSelectedProf] = useState();
-  // const [users, setUsers] = useState();
   const [searchFieldData, setSearchFieldData] = useState('');
   const pageSize = 6;
 
@@ -62,7 +58,7 @@ const UsersListPage = () => {
           return JSON.stringify(user.profession) === JSON.stringify(selectedProf);
         })
         : data;
-        return filteredUsers.filter(user => user._id !== currentUser._id);
+        return filteredUsers.filter(user => user._id !== currentUserId);
     }
     const filteredUsers = filterUsers(users);
 

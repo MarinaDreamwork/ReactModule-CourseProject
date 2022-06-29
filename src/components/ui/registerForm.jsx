@@ -5,10 +5,11 @@ import ChooseField from '../common/form/chooseField';
 import RadioField from '../common/form/radioField';
 import MultiSelectField from '../common/form/multiSelectField';
 import CheckBoxField from '../common/form/checkBoxField';
-import { useQuality } from '../../hooks/useQuality';
-import { useProfession } from '../../hooks/useProfession';
-import { useAuth } from '../../hooks/useAuth';
 import { useHistory } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { getQual } from '../../store/qualities';
+import { getProfessions } from '../../store/profession';
+import { signUp } from '../../store/users';
 
 const RegisterForm = () => {
   const [data, setData] = useState({
@@ -23,16 +24,17 @@ const RegisterForm = () => {
   const [errors, setErrors] = useState({});
 
   const history = useHistory();
+  const dispatch = useDispatch();
 
- const { signUp } = useAuth();
+ // const signUp = useSelector(si);
 
-  const { professions } = useProfession();
+  const professions = useSelector(getProfessions());
   const professionList = professions.map(profession => ({
     value: profession._id,
     label: profession.name
   }));
 
-  const { qualities } = useQuality();
+  const qualities = useSelector(getQual());
   const qualitiesList = qualities.map(qual => ({
     value: qual._id,
     label: qual.name
@@ -45,28 +47,16 @@ const RegisterForm = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     const isValid = validate();
     if (!isValid) return;
-    console.log('data', data);
     const newData = {
       ...data,
       qualities: data.qualities.map(q => q.value)
     };
-    try {
-      await signUp(newData);
-      console.log('newData', newData);
+      dispatch(signUp(newData));
       history.push('/');
-    } catch (error) {
-      setErrors(error);
-    }
-    // const { profession, qualities } = data;
-    // console.log({
-    //   ...data,
-    //   profession: getProfessionById(profession),
-    //   qualities: getQualities(qualities)
-    // });
   };
 
   const validate = () => {

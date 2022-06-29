@@ -4,19 +4,17 @@ import CommentsListComponent from './commentsListComponent';
 import QualitiesCard from './qualitiesCard';
 import MeetingsCard from './meetingsCard';
 import UserCard from './userCard';
-import { useUser } from '../../../hooks/useUser';
 import { CommentProvider } from '../../../hooks/useComment';
+import { useSelector } from 'react-redux';
+import { getUserById } from '../../../store/users';
 
 const UserPage = ({ userId }) => {
-  // const [selectedUser, setSelectedUser] = useState({});
-  const { getUserById } = useUser();
-  const selectedUser = getUserById(userId);
-  // const { userId } = useParams();
+  const selectedUser = useSelector(getUserById(userId));
   const history = useHistory();
+
   const handleSettingsClick = () => {
     history.push(`/users/${userId}/edit`);
   };
-  console.log('select', selectedUser);
 
   if (selectedUser) {
     return (

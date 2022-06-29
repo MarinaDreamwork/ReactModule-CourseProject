@@ -2,21 +2,20 @@ import { useState, useEffect } from 'react';
 import TextField from '../common/form/textField';
 import { validator } from '../../utils/validator';
 import CheckBoxField from '../common/form/checkBoxField';
-import { useAuth } from '../../hooks/useAuth';
 import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAuthErrors, logIn } from '../../store/users';
 
 const LoginForm = () => {
   const [data, setData] = useState({ email: '', password: '', stayOn: false });
   const [errors, setErrors] = useState({});
-
-  const { logIn } = useAuth();
+  const dispatch = useDispatch();
   const history = useHistory();
-  console.log(history.location.state);
+  const redirect = history.location?.state?.from?.pathName
+        ? history.location.state.from.pathName
+        : '/';
 
-  // const checkUsers = (data) => {
-  //   const filteredUser = users.filter(user => user.email === data.email);
-  //   console.log('filteredUser', filteredUser);
-  // };
+  const loginError = useSelector(getAuthErrors());
 
   const handleChange = (target) => {
     setData((prevState) => ({
@@ -25,20 +24,11 @@ const LoginForm = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     const isValid = validate();
     if (!isValid) return;
-    console.log(data);
-    try {
-      // getUserByEmailPassword(data);
-      logIn(data);
-      history.push(history.location.state.from.pathName
-        ? history.location.state.from.pathName
-        : '/');
-    } catch (error) {
-      setErrors(error);
-    };
+      dispatch(logIn({ payload: data, redirect }));
   };
 
   const validate = () => {
@@ -103,6 +93,10 @@ const LoginForm = () => {
         name='stayOn'>
           Остаться в приложении
       </CheckBoxField>
+      { loginError
+        ? <p className='text-danger'>{ loginError }</p>
+        : 'Loading...'
+      }
       <button className='btn btn-primary w-100 mx-auto' disabled={!isValid}>Submit</button>
     </form>
   );

@@ -13,7 +13,6 @@ export const UserProvider = ({ children }) => {
   const [users, setUsers] = useState([]);
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  console.log('users', users);
 
   async function getUsers() {
     try {
@@ -27,7 +26,7 @@ export const UserProvider = ({ children }) => {
 
   function getUserById(userId) {
     return users.find(u => u._id === userId);
-  }
+  };
 
   async function checkUserByEmailPassword({ email, password }) {
     console.log('email:', email, 'password:', password);
@@ -55,6 +54,8 @@ export const UserProvider = ({ children }) => {
       setError(null);
     }
   }, [error]);
+
+  console.log('users', users);
 
   return (
     <UserContext.Provider value={{ users, getUserById, checkUserByEmailPassword, getUsers }}>

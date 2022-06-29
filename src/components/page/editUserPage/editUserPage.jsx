@@ -6,11 +6,11 @@ import TextField from '../../common/form/textField';
 import { validator } from '../../../utils/validator';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import { useQuality } from '../../../hooks/useQuality';
-import { useProfession } from '../../../hooks/useProfession';
-import { useUser } from '../../../hooks/useUser';
-import { useAuth } from '../../../hooks/useAuth';
 import { changeProfessionFormat, changeQualityFormat } from '../../../utils/changeFormat';
+import { useDispatch, useSelector } from 'react-redux';
+import { getQual } from '../../../store/qualities';
+import { getProfessions } from '../../../store/profession';
+import { getUserById, updatedUserData } from '../../../store/users';
 
 const EditUserPage = ({ userId }) => {
   const [data, setData] = useState({
@@ -20,38 +20,25 @@ const EditUserPage = ({ userId }) => {
     sex: 'male',
     qualities: []
   });
-  const { professions, getProfessionById } = useProfession();
-  const { qualities, getQualitiesById } = useQuality();
-  const professionList = changeProfessionsFormat(professions);
-  const qualitiesList = changeQualitiesFormat(qualities);
-  const { updateUserData } = useAuth();
-  const { getUserById } = useUser();
-  const user = getUserById(userId);
-  const [errors, setErrors] = useState({});
+  const qualities = useSelector(getQual());
+  const qualitiesList = qualities.map(qualItem => ({
+    value: qualItem._id,
+    label: qualItem.name,
+    color: qualItem.color
+  }));
+  const professions = useSelector(getProfessions());
+  const professionList = professions.map(profItem => ({
+    value: profItem._id,
+    label: profItem.name
+  }));
 
+  const user = useSelector(getUserById(userId));
+  const dispatch = useDispatch();
+  const [errors, setErrors] = useState({});
   const history = useHistory();
 
   const backPreviousPage = () => {
     return history.goBack();
-  };
-
-  function changeProfessionsFormat(profArray) {
-    return profArray.map(profItem => (
-      {
-        value: profItem._id,
-        label: profItem.name
-      }
-    ));
-  };
-
-  function changeQualitiesFormat(qualArray) {
-    return qualArray.map(qualItem => (
-      {
-        value: qualItem._id,
-        label: qualItem.name,
-        color: qualArray.color
-      }
-    ));
   };
 
   const handleChange = (target) => {
@@ -66,12 +53,12 @@ const EditUserPage = ({ userId }) => {
     const isValid = validate();
     if (!isValid);
     const { profession, qualities } = data;
-    updateUserData({
+    dispatch(updatedUserData({
       ...data,
       _id: userId,
       profession: changeProfessionFormat(profession),
       qualities: changeQualityFormat(qualities)
-    });
+    }));
     backPreviousPage();
   };
 
@@ -104,26 +91,51 @@ const EditUserPage = ({ userId }) => {
   }, [data]);
 
   const getProfession = (id) => {
-    const profession = getProfessionById(id);
-    return [{
-      value: profession._id,
-      label: profession.name
-    }];
+    const newArray = [];
+    for (const elem of professions) {
+      if (elem._id === id) {
+        newArray.push({
+          value: elem._id,
+          label: elem.name
+        });
+      }
+    }
+    return newArray;
+    // const profession = getProfessionById(id);
+    // return [{
+    //   value: profession._id,
+    //   label: profession.name
+    // }];
    };
 
-  const getQualities = (arrayOfIds) => {
-    const qualitiesArray = [];
-    for (const elem of arrayOfIds) {
-      console.log('elem', elem);
-      const q = getQualitiesById(elem);
-      console.log('q', q);
-      qualitiesArray.push({
-        value: q._id,
-        label: q.name,
-        color: q.color
-      });
+  // const getQualities = (arrayOfIds) => {
+  //   const qualitiesArray = [];
+  //   for (const elem of arrayOfIds) {
+  //     const q = qualities(elem);
+  //     qualitiesArray.push({
+  //       value: q._id,
+  //       label: q.name,
+  //       color: q.color
+  //     });
+  //   }
+  //   return qualitiesArray;
+  // };
+
+  const getQualities = (arrayOfQualitiesIds) => {
+    const newArray = [];
+    for (const elem of arrayOfQualitiesIds) {
+      for (const item of qualities) {
+        if (elem === item._id) {
+          newArray.push({
+            value: item._id,
+            label: item.name,
+            color: item.color
+          });
+          break;
+        }
+      }
     }
-    return qualitiesArray;
+    return newArray;
   };
 
   useEffect(() => {
@@ -137,6 +149,7 @@ const EditUserPage = ({ userId }) => {
     }));
   }, []);
 
+  console.log(getQualities(user.qualities));
   return (
     <>
       <div className='container'>

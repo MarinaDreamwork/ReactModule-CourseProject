@@ -1,31 +1,38 @@
 import CommentsComponent from './commentsComponent';
 import NewCommentForm from './newCommentForm';
 import _ from 'lodash';
-import { useComment } from '../../../hooks/useComment';
 import { useParams } from 'react-router-dom';
-// import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { createComment, getComments, getCommentsLoading, loadCommentsList, removeComment } from '../../../store/comments';
+import { getCurrentUserId } from '../../../store/users';
 
 const CommentsListComponent = () => {
   const { userId } = useParams();
-  const { createComment, comments, removeComment } = useComment();
+  const dispatch = useDispatch();
+  const isLoading = useSelector(getCommentsLoading());
+  const comments = useSelector(getComments());
+  const currentUserId = useSelector(getCurrentUserId());
   console.log('comments', comments);
 
   const handleDeleteClick = (id) => {
-    removeComment(id);
-  //  console.log('comment id', id);
+    dispatch(removeComment(id));
   //  API.comments.remove(id).then(id => setComments(comments.filter(comment => comment._id !== id)));
   };
   const handleSubmit = (data) => {
   //   API.comments.add(data).then(data => setComments([...comments, data]));
-    createComment(data);
+    dispatch(createComment(data, userId, currentUserId));
   };
 
   const sortedComments = _.orderBy(comments, ['created_by'], ['desc']);
 
+  useEffect(() => {
+    dispatch(loadCommentsList(userId));
+  }, [userId]);
+
   return (
     <>
       <div className='card mb-2'>
-        {' '}
         <div className='card-body '>
           <h2>New comment</h2>
            <NewCommentForm onHandleSubmit={handleSubmit} userId={userId}/>
@@ -35,10 +42,13 @@ const CommentsListComponent = () => {
         <div className='card-body '>
           <h2>Comments</h2>
           <hr />
-          <CommentsComponent
-            comments={sortedComments}
-            onDeleteClick={handleDeleteClick}
-          />
+          { !isLoading
+            ? <CommentsComponent
+                comments={sortedComments}
+                onDeleteClick={handleDeleteClick}
+              />
+            : 'Comments loading...'
+          }
         </div>
       </div>
       }

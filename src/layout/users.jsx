@@ -1,36 +1,34 @@
+import { useSelector } from 'react-redux';
 import { Redirect, useParams } from 'react-router-dom';
+import UsersLoader from '../components/HOC/usersLoader';
 import EditUserPage from '../components/page/editUserPage/editUserPage';
 import UserPage from '../components/page/userPage/userPage';
 import UsersListPage from '../components/page/usersListPage/usersListPage';
-import { useAuth } from '../hooks/useAuth';
-import { QualityProvider } from '../hooks/useQuality';
-import { UserProvider } from '../hooks/useUser';
+import { getCurrentUserId } from '../store/users';
 
 const Users = () => {
     const params = useParams();
-    const { currentUser } = useAuth();
-    console.log(currentUser);
+    const currentUserId = useSelector(getCurrentUserId());
     const { userId, edit } = params;
+    console.log('currentUserId', currentUserId);
+    console.log('userId', userId);
+
     return (
       <>
-        <UserProvider>
-          <QualityProvider>
+        <UsersLoader>
           { userId ? (
             edit ? (
-              (userId === currentUser._id)
+              (userId === currentUserId)
               ? <EditUserPage userId={userId} />
-              : (<Redirect to={`/users/${currentUser._id}/edit`}>
-                  <EditUserPage userId={currentUser._id} />
-                </Redirect>)
-            ) : (
+              : <Redirect to={`/users/${currentUserId}/edit`} />)
+              : (
               <UserPage userId={userId} />
             )
             ) : (
               <UsersListPage />
             )
           }
-          </QualityProvider>
-        </UserProvider>
+          </UsersLoader>
       </>
     );
 };
