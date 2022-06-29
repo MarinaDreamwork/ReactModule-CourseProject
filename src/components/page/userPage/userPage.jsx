@@ -4,7 +4,6 @@ import CommentsListComponent from './commentsListComponent';
 import QualitiesCard from './qualitiesCard';
 import MeetingsCard from './meetingsCard';
 import UserCard from './userCard';
-import { CommentProvider } from '../../../hooks/useComment';
 import { useSelector } from 'react-redux';
 import { getUserById } from '../../../store/users';
 
@@ -26,9 +25,7 @@ const UserPage = ({ userId }) => {
             <MeetingsCard meetings={selectedUser.completedMeetings} />
           </div>
           <div className='col-md-8'>
-            <CommentProvider>
-              <CommentsListComponent />
-            </CommentProvider>
+            <CommentsListComponent />
           </div>
         </div>
       </div>

@@ -2,13 +2,11 @@ import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { validator } from '../../../utils/validator';
 import TextAreaField from '../../common/form/textAreaField';
-// import { useComment } from '../../../hooks/useComments';
 
 const NewCommentForm = ({ onHandleSubmit, userId }) => {
   const initialState = { pageId: userId, userId: '', content: '' };
   const [data, setData] = useState({});
   const [errors, setErrors] = useState({});
-  // const [senders, setSenders] = useState([]);
 
   const handleChange = (target) => {
     console.log('target', target);
