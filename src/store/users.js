@@ -63,7 +63,7 @@ const usersSlice = createSlice({
     },
     userUpdatedRequestSuccess: (state, action) => {
       if (state.entities) {
-        state.entities = state.entities.map(u => u._id === action.payload._id ? { ...action.payload } : { ...u });
+        state.entities[state.entities.findIndex(u => u._id === action.payload._id)] = action.payload;
       }
     },
     userUpdatedRequestFailed: (state, action) => {
